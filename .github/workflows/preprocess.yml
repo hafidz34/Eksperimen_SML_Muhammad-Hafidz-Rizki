@@ -12,6 +12,8 @@ jobs:
     
     # Menentukan OS yang akan dipakai (Ubuntu versi terbaru)
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       # Checkout (download) kode dari repository ke server/runner GitHub
