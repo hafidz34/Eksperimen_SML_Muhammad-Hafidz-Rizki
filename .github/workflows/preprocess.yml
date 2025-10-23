@@ -1,0 +1,47 @@
+name: Run Data Preprocessing
+
+# Trigger: Workflow ini akan berjalan setiap kali ada 'push' ke branch 'main'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Nama job
+  run-preprocessing:
+    
+    # Menentukan OS yang akan dipakai (Ubuntu versi terbaru)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout (download) kode dari repository ke server/runner GitHub
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Menyiapkan lingkungan Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+
+      # Install semua library yang dibutuhkan oleh skrip .py
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas scikit-learn
+
+      # Run skrip preprocessing
+      # Skrip ini akan membaca './loan_approval_raw.csv' (dari root)
+      # dan membuat file baru di 'preprocessing/loan_approval_preprocessing.csv'
+      - name: Run preprocessing script
+        run: python preprocessing/automate_Muhammad-Hafidz-Rizki.py
+
+      # Commit dan Push file baru (hasil preprocessing) kembali ke repository
+      # Ini adalah bagian "mengembalikan dataset terbaru"
+      - name: Commit processed data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Auto: Update processed data (loan_approval_preprocessing.csv)'
+          file_pattern: 'preprocessing/loan_approval_preprocessing.csv' # Hanya commit file ini
+          commit_user_name: 'hafidz34' # Nama yang akan muncul di log commit
+          commit_user_email: 'hafidzrizki443@gmail.com' # Email yang akan muncul di log commit
