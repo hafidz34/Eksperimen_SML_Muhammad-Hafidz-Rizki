@@ -36,9 +36,7 @@ jobs:
       # 4. Run skrip preprocessing
       #    Menggunakan path relatif untuk input dan output di dalam repo
       - name: Run preprocessing script (split, scale)
-        run: python preprocessing/automate_Muhammad-Hafidz-Rizki.py --input loan_approval_raw.csv --output_folder loan_approval_preprocessing
-        # Pastikan 'automate_Muhammad-Hafidz-Rizki.py' dan 'loan_approval_raw.csv' ada di root repository
-        # atau sesuaikan path di atas jika lokasinya berbeda (misal: 'scripts/automate.py')
+        run: python preprocessing/automate_Muhammad-Hafidz-Rizki.py --input loan_approval_raw.csv --output_folder preprocessing/loan_approval_preprocessing
 
       # 5. Commit dan Push file baru (hasil preprocessing train & test) kembali ke repository
       - name: Commit processed train and test data
