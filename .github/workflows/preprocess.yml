@@ -46,6 +46,6 @@ jobs:
         with:
           commit_message: 'Auto: Update processed train and test data'
           # Menggunakan pola (*) untuk mencakup kedua file CSV di dalam folder
-          file_pattern: 'loan_approval_preprocessing/loan_approval_*.csv'
+          file_pattern: 'preprocessing/loan_approval_preprocessing/loan_approval_*.csv'
           commit_user_name: 'hafidz34'
           commit_user_email: 'hafidzrizki443@gmail.com'
