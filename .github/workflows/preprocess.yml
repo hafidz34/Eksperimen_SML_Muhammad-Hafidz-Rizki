@@ -8,42 +8,44 @@ on:
 
 jobs:
   # Nama job
-  run-preprocessing:
-    
+  run-preprocessing-split-scale:
+
     # Menentukan OS yang akan dipakai (Ubuntu versi terbaru)
     runs-on: ubuntu-latest
+    # Memberikan izin agar action bisa menulis (commit) ke repository
     permissions:
       contents: write
 
     steps:
-      # Checkout (download) kode dari repository ke server/runner GitHub
+      # 1. Checkout (download) kode dari repository ke runner GitHub
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # Menyiapkan lingkungan Python
+      # 2. Menyiapkan lingkungan Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.14'
+          python-version: '3.12' # Sesuaikan jika versi Python berbeda
 
-      # Install semua library yang dibutuhkan oleh skrip .py
+      # 3. Install semua library yang dibutuhkan oleh skrip .py
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pandas scikit-learn
 
-      # Run skrip preprocessing
-      # Skrip ini akan membaca './loan_approval_raw.csv' (dari root)
-      # dan membuat file baru di 'preprocessing/loan_approval_preprocessing.csv'
-      - name: Run preprocessing script
-        run: python preprocessing/automate_Muhammad-Hafidz-Rizki.py
+      # 4. Run skrip preprocessing
+      #    Menggunakan path relatif untuk input dan output di dalam repo
+      - name: Run preprocessing script (split, scale)
+        run: python automate_Muhammad-Hafidz-Rizki.py --input loan_approval_raw.csv --output_folder loan_approval_preprocessing
+        # Pastikan 'automate_Muhammad-Hafidz-Rizki.py' dan 'loan_approval_raw.csv' ada di root repository
+        # atau sesuaikan path di atas jika lokasinya berbeda (misal: 'scripts/automate.py')
 
-      # Commit dan Push file baru (hasil preprocessing) kembali ke repository
-      # Ini adalah bagian "mengembalikan dataset terbaru"
-      - name: Commit processed data
+      # 5. Commit dan Push file baru (hasil preprocessing train & test) kembali ke repository
+      - name: Commit processed train and test data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'Auto: Update processed data (loan_approval_preprocessing.csv)'
-          file_pattern: 'preprocessing/loan_approval_preprocessing.csv' # Hanya commit file ini
-          commit_user_name: 'hafidz34' # Nama yang akan muncul di log commit
-          commit_user_email: 'hafidzrizki443@gmail.com' # Email yang akan muncul di log commit
+          commit_message: 'Auto: Update processed train and test data'
+          # Menggunakan pola (*) untuk mencakup kedua file CSV di dalam folder
+          file_pattern: 'loan_approval_preprocessing/loan_approval_*.csv'
+          commit_user_name: 'hafidz34'
+          commit_user_email: 'hafidzrizki443@gmail.com'
